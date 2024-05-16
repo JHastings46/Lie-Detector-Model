@@ -1,19 +1,63 @@
-# Lie Detector Model
+# Lie Detector Data Analysis Project
 
-## Project Overview
-The Lie Detector Model is designed to predict the outcomes of individuals in a youth program based on various assessments and behavioral scores. This predictive model aims to determine the likelihood of a participant either succeeding (graduating) or failing (being discharged) based on their entrance assessments.
+## Overview
+This repository contains a comprehensive analysis of data related to lie detection. The project is divided into several key components, each focusing on different stages of data processing and analysis, including sampling, data wrangling, exploratory data analysis (EDA), regression analysis, and machine learning.
 
-## Features
-- Predictive modeling using machine learning techniques.
-- Analysis of historical data from program participants.
-- Utilization of logistic regression, decision trees, and other algorithms for classification.
-- Extensive data handling and preprocessing in R:
-  - **Data Loading and Preprocessing**: Uses `readxl` to read Excel data, ensuring smooth data handling for further analysis.
-  - **Data Inspection**: Initial data exploration using functions like `head()` and `summary()` to understand the structure, especially focusing on the 'Result Score' column.
-  - **Data Transformation**: Conversion of 'Result Score' from character to numeric for accurate mathematical operations.
-  - **Success Counting**: Calculation of the number of successes based on the 'Result Score'.
-  - **Descriptive Statistics**: Generation of basic statistics, frequency, and proportion tables to get insights into 'Result Score'.
-  - **Data Visualization**: Creation of histograms and bar plots for visual insights into variables like 'Days in Program' and 'Result Score'.
-  - **Advanced Statistical Analysis**: Calculation of variance and standard deviation across numeric variables in the dataset.
-  - **Maximum Likelihood Estimation (MLE)**: Applies MLE to estimate the probability of success in binomial trials, enriching the model's statistical foundation.
+## Table of Contents
+1. [Project Structure](#project-structure)
+2. [Installation](#installation)
+3. [Usage](#usage)
+4. [Files](#files)
+5. [Results](#results)
+6. [Contributing](#contributing)
+7. [License](#license)
+
+## Project Structure
+- **1.Start Sampleling Data copy.R**: Initial data sampling script in R.
+- **2.Lie Detector- Data Wrangling(1).ipynb**: Jupyter notebook for data cleaning and preparation.
+- **3.Lie Detector Exploratory Data analysis (1).ipynb**: Jupyter notebook for exploratory data analysis (EDA).
+- **4.Lie Detector Regression analysis.ipynb**: Jupyter notebook for regression analysis.
+- **5.Lie Detector Machine learning.ipynb**: Jupyter notebook for machine learning modeling.
+
+## Installation
+To run the notebooks in this repository, you will need to have the following software installed:
+- Python 3.x
+- Jupyter Notebook
+- R (for the initial sampling script)
+- Relevant Python libraries (pandas, numpy, matplotlib, seaborn, scikit-learn, etc.)
+
+## Usage
+1. **Start Sampling Data**:
+   - Open `1.Start Sampleling Data copy.R` in RStudio or another R environment.
+   - Run the script to perform initial data sampling.
+
+2. **Data Wrangling**:
+   - Open `2.Lie Detector- Data Wrangling(1).ipynb` in Jupyter Notebook.
+   - Execute the cells to clean and prepare the dataset for analysis.
+
+3. **Exploratory Data Analysis (EDA)**:
+   - Open `3.Lie Detector Exploratory Data analysis (1).ipynb` in Jupyter Notebook.
+   - Execute the cells to perform EDA and visualize data insights.
+
+4. **Regression Analysis**:
+   - Open `4.Lie Detector Regression analysis.ipynb` in Jupyter Notebook.
+   - Execute the cells to build and evaluate regression models.
+
+5. **Machine Learning**:
+   - Open `5.Lie Detector Machine learning.ipynb` in Jupyter Notebook.
+   - Execute the cells to build and evaluate machine learning models.
+
+## Files
+- **1.Start Sampleling Data copy.R**: Script for initial data sampling in R.
+- **2.Lie Detector- Data Wrangling(1).ipynb**: Notebook for data cleaning and preparation.
+- **3.Lie Detector Exploratory Data analysis (1).ipynb**: Notebook for exploratory data analysis.
+- **4.Lie Detector Regression analysis.ipynb**: Notebook for regression analysis.
+- **5.Lie Detector Machine learning.ipynb**: Notebook for machine learning modeling.
+
+## Results
+The analysis provides insights into the patterns and characteristics of lie detection data, building regression and machine learning models to predict and understand lie detection outcomes. Detailed results and findings are documented within each notebook.
+
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
