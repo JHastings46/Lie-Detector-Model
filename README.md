@@ -14,7 +14,7 @@ This repository contains a comprehensive analysis of data related to lie detecti
 
 ## Project Structure
 - **1.Start Sampleling Data copy.R**: Initial data sampling script in R.
-- **2.Lie Detector- Data Wrangling(1).ipynb**: Jupyter notebook for data cleaning and preparation.
+- **2.Statistical Modeling- Data Wrangling(1).R**: Feature Engineering & Model preperation in R.
 - **3.Lie Detector Exploratory Data analysis (1).ipynb**: Jupyter notebook for exploratory data analysis (EDA).
 - **4.Lie Detector Regression analysis.ipynb**: Jupyter notebook for regression analysis.
 - **5.Lie Detector Machine learning.ipynb**: Jupyter notebook for machine learning modeling.
