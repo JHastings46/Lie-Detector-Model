@@ -29,10 +29,12 @@ To understand the underlying success probability of a client program using **Ber
    - QQ-plot confirmed approximate normality of sample means.  
 
 4. **Hypothesis Testing**  
-   - \( H_0: \mu = 0.5 \) vs \( H_1: \mu \neq 0.5 \)  
-   - t-Test p-value = **0.215** → Fail to reject \( H_0 \).  
+   - $H_0: \mu = 0.5$ vs $H_1: \mu \neq 0.5$  
+   - t-test p-value = **0.215** → Fail to reject $H_0$  
    - 95% CI for mean: **[0.368, 0.814]**  
-   - True variance test \( H_0: \sigma^2 = 0.25 \): p = **0.887** → Fail to reject \( H_0 \).  
+   - Variance test $H_0: \sigma^2 = 0.25$ → p = **0.887**, Fail to reject $H_0$  
+   - Estimated $\alpha^2$ ≈ **0.25**
+ 
 
 5. **Inference**  
    - The observed success rate (≈59%) is statistically consistent with a 50% Bernoulli process.  
