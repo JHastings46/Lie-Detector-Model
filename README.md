@@ -1,111 +1,150 @@
-
-#  Lie Detector Model — Program Completion Prediction
-
-##  Overview
-
-This project explores whether participant entrance assessment scores can **predict successful program completion**. It’s structured in **two key phases**:
-
-1. **Statistical Inference** — Establishing a baseline probability of completion using Bernoulli distribution and hypothesis testing.
-2. **Statistical Modelling** — Building, evaluating, and comparing predictive models to determine if they can outperform the baseline accuracy.
-
-The ultimate goal:
-
-> 🏆 **Can I build a model that beats the baseline accuracy of 59% and generalizes well to unseen data?**
+# Predictive Modeling & Statistical Inference Projects  
+**Author:** J. Hastings  
+**Date:** 2024–2025  
+**Language:** R  
+**Keywords:** Bernoulli Distribution · Logistic Regression · PCA · GAM · Cross-Validation  
 
 ---
 
-## 📈 Phase 1: Statistical Inference — Establishing the Baseline
+##  Project 1: Statistical Inference — Bernoulli Data Analysis  
+**Date:** July 3, 2024  
 
-The first phase focuses on understanding the underlying data before introducing any predictive model.
+###  Objective  
+To understand the underlying success probability of a client program using **Bernoulli-distributed outcome data**  
+(`1 = successful completion`, `0 = unsuccessful`).
 
-### Key Steps:
+###  Key Steps  
+1. **Observed Data Analysis**  
+   - Sample size: **22 participants**  
+   - Probability of success (`p̂`): **0.59**  
+   - Interpreted as a 59% completion rate.  
 
-* Calculated the probability of success from observed Bernoulli outcomes (`p̂ = 0.59`).
-* Simulated theoretical Bernoulli trials to compare observed and expected distributions.
-* Constructed **confidence intervals** for mean and variance.
-* Conducted **t-tests** and **chi-square tests** to validate whether the observed data significantly deviated from population parameters.
-* Used QQ plots and resampling to check for normality of the sampling distribution.
+2. **Theoretical Bernoulli Distribution**  
+   - Simulated 10,000 trials with `p = 0.5`.  
+   - Estimated population variance ≈ **0.25**.  
+   - Compared observed vs. theoretical distributions using histograms.  
 
-✅ **Result:** Baseline accuracy = **59%**
-This represents the performance level of a naïve model predicting all participants as completers.
+3. **Normality & Resampling**  
+   - Bootstrapped 1,000 samples to test sampling distribution.  
+   - QQ-plot confirmed approximate normality of sample means.  
 
----
+4. **Hypothesis Testing**  
+   - \( H_0: \mu = 0.5 \) vs \( H_1: \mu \neq 0.5 \)  
+   - t-Test p-value = **0.215** → Fail to reject \( H_0 \).  
+   - 95% CI for mean: **[0.368, 0.814]**  
+   - True variance test \( H_0: \sigma^2 = 0.25 \): p = **0.887** → Fail to reject \( H_0 \).  
 
-## 🤖 Phase 2: Statistical Modelling — Beating the Baseline
-
-The second phase tests different models to see if they can outperform the 59% baseline.
-
-### Data & Features:
-
-* **Target:** `Result.Score` (`1` = completer, `0` = non-completer)
-* **Predictors:** Assessment domains
-
-  * `PWS`, `DL`, `SC`, `RC`, `HMM`, `WSL`, `CEP`, `LF`
-
-### Models Tested:
-
-| Model                        | In-Sample Accuracy | LOOCV Accuracy | Outcome                      |
-| ---------------------------- | ------------------ | -------------- | ---------------------------- |
-| Logistic Regression          | 86%                | 60%            | Matches baseline             |
-| PCA + GAM                    | 100%               | 31%            | Overfit, poor generalization |
-| Composite Mean GAM           | 72%                | 75%            | Beats baseline               |
-| **Composite2 (Logit + GAM)** | 86%                | **83%**        | ✅ Best performing model      |
-
-✅ **Best Model:** Composite2 GAM — using a logistic regression–derived composite score as a single predictor.
-This approach provided strong predictive power, avoided overfitting, and produced interpretable results.
+5. **Inference**  
+   - The observed success rate (≈59%) is statistically consistent with a 50% Bernoulli process.  
+   - Indicates moderate but not statistically significant program improvement.  
 
 ---
 
-## 🧮 Why This Matters
+## 🤖 Project 2: Statistical Modeling — Predicting Program Completion  
+**Date:** June 7, 2025  
 
-* **Inference first, modeling second**: By grounding the model in statistical inference, I ensured the results were meaningful and not random.
-* **Cross-validation over simple accuracy**: LOOCV gave a realistic view of how the model performs on new data.
-* **Interpretability**: Composite2 GAM provides a clean, understandable way to assess participant completion risk.
+###  Objective  
+To build a predictive “**Lie Detector Model**” that determines which participants are likely to **successfully complete** the program based on their **entrance assessment scores**.
 
----
+###  Data Overview  
+Each row represents a youth participant with scores across 8 skill domains:  
+| Acronym | Category |  
+|----------|-----------|  
+| PWS | Permanency / Navigating Welfare System |  
+| DL | Daily Living |  
+| SC | Self Care |  
+| RC | Relationships & Communication |  
+| HMM | Housing & Money Management |  
+| WSL | Work & Study Life |  
+| CEP | Career & Education Planning |  
+| LF | Looking Forward |  
 
-## 📊 Example Prediction
-
-| Assessment Domain | Score |
-| ----------------- | ----- |
-| PWS               | 4.2   |
-| DL                | 4.5   |
-| SC                | 4.0   |
-| RC                | 4.3   |
-| HMM               | 3.9   |
-| WSL               | 4.1   |
-| CEP               | 4.2   |
-| LF                | 4.0   |
-
-* Predicted Probability: **0.99**
-* Predicted Class: **1** (Completer)
-
----
-
-## 🧰 Tech Stack
-
-* **Language:** R
-* **Key Packages:**
-
-  * `boot` (Cross-validation)
-  * `mgcv` (GAM models)
-  * `stats` (GLM, inference tests)
-  * `base` (data wrangling, visualization)
+Outcome Variable:  
+- `1 = Completer`  
+- `0 = Non-completer`  
 
 ---
 
-## 🚀 Next Steps
+## 🧹 Data Cleaning & Preparation  
+-  No missing or duplicate rows.  
+-  Standardized all assessment variables to normalize spread (SD ratio = 1.7).  
+-  Principal Component Analysis (PCA) reduced 8 features → **3 PCs explaining ≥90% variance**.
 
-* Add more features (e.g., demographic, behavioral indicators) to strengthen model generalization.
-* Validate on a larger, external dataset.
-* Deploy a simple **Shiny app** or API to make predictions operational.
+---
+
+## 🧪 Modeling Approach  
+
+### 1. Baseline — Logistic Regression (GLM)
+- Model: `Result.Score ~ PWS + DL + SC + RC + HMM + WSL + CEP + LF`  
+- Validation: Leave-One-Out Cross-Validation (LOOCV)  
+- Accuracy: **54.5%** vs Baseline (59.1%) → *Underperformed simple guessing*  
+
+### 2.  Advanced — PCA + GAM (Generalized Additive Model)
+- Model: `Result.Score ~ s(PC1) + PC2 + PC3 + Gender`  
+- Allows for **nonlinear effects** and **interaction by Gender**.  
+- LOOCV Accuracy: **77.3%**  
+- 5-Fold Cross-Validation: **83% ± 0.17**  
+- Baseline Accuracy: **59%**
+
+| Metric | GLM (PC1 + Gender) | GAM (PC1–PC3 + Gender) |
+|---------|--------------------|-------------------------|
+| LOOCV Accuracy | 0.636 | **0.773** ✅ |
+| 5-Fold Accuracy | — | **0.83 ± 0.17** |
+| Baseline | 0.591 | 0.591 |
+| Interpretability | High | Moderate (nonlinear) |
+| Overfitting Risk | Medium | Lower (cross-validated) |
 
 ---
 
-## 🧾 License
-
-This project is for **educational and research purposes** only. No personally identifiable information is included.
+## 📈 Key Insights  
+- **PC1** shows a **nonlinear relationship** with completion likelihood.  
+- **Gender** introduces a small but noticeable shift — females generally scored higher.  
+- The **GAM model captures patterns** that the simpler GLM missed.  
+- **Predicted probability (example):**  
+  - New female participant → **0.985 (likely completer)**  
 
 ---
+
+## ⚖️ Interpretation: Prediction Strength vs. Statistical Significance  
+Even though **PC1, PC2, PC3, and Gender** were *not statistically significant*,  
+the model still **generalized well** and achieved strong predictive accuracy.  
+
+This underscores a key trade-off:  
+- **Predictive strength** ≠ **Statistical significance**.  
+- The model forecasts outcomes accurately but provides less interpretive clarity about “why.”  
+
+---
+
+##  Next Steps  
+1. **Validation:**  
+   - Re-run both **GLM (PC1 + Gender)** and **GAM (PC1–PC3 + Gender)** using **LOOCV** and **10-fold CV** for stronger reliability.  
+2. **Expansion:**  
+   - Collect more observations to stabilize variance and improve inference power.  
+3. **Simplification:**  
+   - Reassess whether PC2 and PC3 add meaningful predictive value — possibly refit `s(PC1) + Gender`.  
+4. **Deployment:**  
+   - Package the final GAM pipeline (scaling, PCA rotation, GAM model) for real-time predictions.  
+5. **Monitoring:**  
+   - Continuously validate model accuracy as new data comes in to detect drift over time.  
+
+---
+
+## Final Conclusion  
+The **GAM (PC1–PC3 + Gender)** model achieved **77–83% accuracy**, outperforming both the baseline (59%) and the simpler GLM.  
+It offers **strong predictive performance** and **generalizes well** despite small sample size.  
+
+However, because its predictors are not statistically significant, it should be viewed as a **high-performing predictive model** rather than an explanatory one.  
+It provides a robust foundation for developing future tools that help identify participants most likely to succeed in the program.  
+
+---
+
+##  Technologies Used  
+- **R 4.5.1** (macOS Sequoia 15.6.1)  
+- Libraries:  
+  - `mgcv` — Generalized Additive Models  
+  - `caret` — Cross-validation and model assessment  
+  - `ggplot2` — Visualization  
+  - `glmnet` / `brglm2` — Robust logistic regression alternatives  
+  - `knitr`, `rmarkdown` — Report generation  
 
 
