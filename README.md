@@ -1,152 +1,194 @@
-# Predictive Modeling & Statistical Inference Projects  
+# Predictive Modeling & Statistical Inference Projects
+
 **Author:** J. Hastings  
-**Date:** 2024–2025  
+**Date:** 2024–2026  
 **Language:** R  
-**Keywords:** Bernoulli Distribution · Logistic Regression · PCA · GAM · Cross-Validation  
+**Keywords:** Bernoulli Distribution · PCA · GAM · Regularized Logistic Regression · LOOCV · AUC
 
 ---
 
-##  Project 1: Statistical Inference — Bernoulli Data Analysis  
-**Date:** July 3, 2024  
+## Project 1: Statistical Inference — Bernoulli Data Analysis
 
-###  Objective  
-To understand the underlying success probability of a client program using **Bernoulli-distributed outcome data**  
-(`1 = successful completion`, `0 = unsuccessful`).
+**Date:** July 3, 2024
 
-###  Key Steps  
-1. **Observed Data Analysis**  
-   - Sample size: **22 participants**  
-   - Probability of success (`p̂`): **0.59**  
-   - Interpreted as a 59% completion rate.  
+### Objective
+Estimate the underlying success probability of a client program using Bernoulli outcome data:
 
-2. **Theoretical Bernoulli Distribution**  
-   - Simulated 10,000 trials with `p = 0.5`.  
-   - Estimated population variance ≈ **0.25**.  
-   - Compared observed vs. theoretical distributions using histograms.  
+- `1` = successful completion  
+- `0` = unsuccessful completion  
 
-3. **Normality & Resampling**  
-   - Bootstrapped 1,000 samples to test sampling distribution.  
-   - QQ-plot confirmed approximate normality of sample means.  
+### Key Steps
 
-4. **Hypothesis Testing**  
-   - $H_0: \mu = 0.5$ vs $H_1: \mu \neq 0.5$  
-   - t-test p-value = **0.215** → Fail to reject $H_0$  
-   - 95% CI for mean: **[0.368, 0.814]**  
-   - Variance test $H_0: \sigma^2 = 0.25$ → p = **0.887**, Fail to reject $H_0$  
-   - Estimated $\alpha^2$ ≈ **0.25**
- 
+#### Observed Data Analysis
+- Sample size: `22` participants  
+- Estimated completion rate: `0.59`  
+- Interpreted as a 59% observed success rate  
 
-5. **Inference**  
-   - The observed success rate (≈59%) is statistically consistent with a 50% Bernoulli process.  
-   - Indicates moderate but not statistically significant program improvement.  
+#### Theoretical Bernoulli Distribution
+- Simulated `10,000` Bernoulli trials with `p = 0.5`  
+- Estimated population variance: approximately `0.25`  
+- Compared observed and theoretical behavior using visual summaries  
 
----
+#### Normality and Resampling
+- Bootstrapped `1,000` samples  
+- QQ-plot showed approximate normality of sample means  
 
-## 🤖 Project 2: Statistical Modeling — Predicting Program Completion  
-**Date:** June 7, 2025  
+#### Hypothesis Testing
+- Tested whether the mean completion rate differed from `0.5`  
+- t-test p-value: `0.215` → failed to reject the null  
+- 95% confidence interval for the mean: `[0.368, 0.814]`  
+- Variance test p-value: `0.887` → failed to reject the null  
+- Estimated variance remained close to the Bernoulli benchmark of `0.25`  
 
-###  Objective  
-To build a predictive “**Lie Detector Model**” that determines which participants are likely to **successfully complete** the program based on their **entrance assessment scores**.
-
-###  Data Overview  
-Each row represents a youth participant with scores across 8 skill domains:  
-| Acronym | Category |  
-|----------|-----------|  
-| PWS | Permanency / Navigating Welfare System |  
-| DL | Daily Living |  
-| SC | Self Care |  
-| RC | Relationships & Communication |  
-| HMM | Housing & Money Management |  
-| WSL | Work & Study Life |  
-| CEP | Career & Education Planning |  
-| LF | Looking Forward |  
-
-Outcome Variable:  
-- `1 = Completer`  
-- `0 = Non-completer`  
+### Inference
+The observed completion rate of about **59%** was statistically consistent with a **50% Bernoulli process**. This suggests moderate program success, but not enough evidence to conclude a statistically significant improvement over chance.
 
 ---
 
-## 🧹 Data Cleaning & Preparation  
--  No missing or duplicate rows.  
--  Standardized all assessment variables to normalize spread (SD ratio = 1.7).  
--  Principal Component Analysis (PCA) reduced 8 features → **3 PCs explaining ≥90% variance**.
+## Project 2: Statistical Modeling — Predicting Program Completion
+
+**Date:** Updated April 2026
+
+### Objective
+Build a predictive **Lie Detector Model** that estimates whether a participant will successfully complete the program using entrance assessment scores.
+
+### Outcome Variable
+- `1` = Completer  
+- `0` = Non-completer  
+
+### Assessment Variables
+- **PWS** — Permanency / Navigating Welfare System  
+- **DL** — Daily Living  
+- **SC** — Self Care  
+- **RC** — Relationships & Communication  
+- **HMM** — Housing & Money Management  
+- **WSL** — Work & Study Life  
+- **CEP** — Career & Education Planning  
+- **LF** — Looking Forward  
+
+### Data Preparation
+- Removed non-modeling columns such as IDs and category labels where appropriate  
+- Converted outcome to binary integer form  
+- Treated `Gender` as a categorical predictor  
+- Applied **PCA within each training fold only** to avoid leakage  
+- Used **Leave-One-Out Cross-Validation (LOOCV)** for model evaluation  
+
+### Models Tested
+
+#### 1. Baseline GAM
+Model:
+`Result.Score ~ Gender + s(Avg_Metric)`
+
+Performance:
+- **AUC:** `0.5897`
+- **Sensitivity:** `0.7692`
+- **Specificity:** `0.4444`
+
+Interpretation:
+The baseline model performed only slightly better than random guessing and was much better at identifying completers than non-completers.
+
+#### 2. PCA + GAM
+Model:
+`Result.Score ~ Gender + s(PC1)`
+
+Performance:
+- **AUC:** `0.6068`
+- **Sensitivity:** `0.7692`
+- **Specificity:** `0.5556`
+
+Interpretation:
+Using PCA gave a small improvement over the baseline model and improved balance, especially for identifying non-completers.
+
+#### 3. PCA + GLM
+Model:
+`Result.Score ~ Gender + PC1`
+
+Performance:
+- **AUC:** `0.6154`
+- **Sensitivity:** `0.6923`
+- **Specificity:** `0.5556`
+
+Interpretation:
+The GLM using PC1 performed slightly better than the GAM-based versions in overall separation, but performance was still modest.
+
+#### 4. PCA + SMOTE + GAM
+Model:
+`Result.Score ~ Gender + s(PC1)`
+
+Performance:
+- **AUC:** `0.6154`
+- **Accuracy:** `0.6818`
+- **Sensitivity:** `0.6923`
+- **Specificity:** `0.6667`
+
+Interpretation:
+SMOTE improved balance between the two classes, especially specificity, but did not improve overall AUC.
+
+#### 5. Final Model — PCA + Regularized GLM
+Model:
+`Result.Score ~ Gender + PC1 + PC2`
+
+Method:
+- Ridge-regularized logistic regression using `glmnet`
+- PCA trained inside each LOOCV fold
+- Final production model fit on all data using the same PCA pipeline
+
+Performance:
+- **AUC:** `0.7692`
+- **Accuracy:** `0.8182`
+- **Sensitivity:** `0.9231`
+- **Specificity:** `0.6667`
+
+Interpretation:
+This was the strongest model tested. Adding **PC2** and using **regularization** substantially improved class separation and overall prediction quality.
+
+### Model Comparison
+
+| Model | AUC | Accuracy | Sensitivity | Specificity |
+|------|-----:|---------:|------------:|------------:|
+| Baseline GAM | 0.5897 | — | 0.7692 | 0.4444 |
+| PCA + GAM | 0.6068 | — | 0.7692 | 0.5556 |
+| PCA + GLM | 0.6154 | — | 0.6923 | 0.5556 |
+| PCA + SMOTE + GAM | 0.6154 | 0.6818 | 0.6923 | 0.6667 |
+| **PCA + Regularized GLM** | **0.7692** | **0.8182** | **0.9231** | **0.6667** |
+
+### New Data Prediction Example
+Using the final regularized GLM, a new participant with the entered assessment profile received:
+
+- **Predicted probability of completion:** `0.987`
+- **Predicted class:** `1`  
+
+Interpretation:
+The model classified this participant as a **likely completer** with very high confidence.
+
+### Key Insight
+The strongest predictive performance came from combining:
+
+- **PCA** for dimension reduction  
+- **PC1 and PC2** as compressed signals from the eight assessments  
+- **Ridge regularization** for a more stable logistic model on a small dataset  
+
+This project shows that predictive performance improved meaningfully once the workflow moved beyond the baseline average-score model and into a leak-free PCA + regularization pipeline.
+
+### Next Steps
+1. Re-test the final model with repeated cross-validation or bootstrapping for stability.  
+2. Add more participant records to improve reliability and reduce small-sample noise.  
+3. Compare the final `PC1 + PC2 + Gender` model against a simpler `PC1 + Gender` version.  
+4. Save the final PCA object and regularized GLM for real-time scoring of new cases.  
+5. Monitor AUC, accuracy, sensitivity, and specificity as new data is added.  
+
+### Final Conclusion
+The final **PCA + regularized GLM** was the best-performing model in the project, achieving **0.7692 AUC** and **81.8% accuracy**, clearly outperforming the earlier GAM, GLM, and SMOTE-based versions. While the dataset is small and results should be interpreted with caution, the updated workflow provides a stronger and more stable predictive foundation for identifying participants most likely to complete the program.
 
 ---
 
-## 🧪 Modeling Approach  
+## Technologies Used
 
-### 1. Baseline — Logistic Regression (GLM)
-- Model: `Result.Score ~ PWS + DL + SC + RC + HMM + WSL + CEP + LF`  
-- Validation: Leave-One-Out Cross-Validation (LOOCV)  
-- Accuracy: **54.5%** vs Baseline (59.1%) → *Underperformed simple guessing*  
-
-### 2.  Advanced — PCA + GAM (Generalized Additive Model)
-- Model: `Result.Score ~ s(PC1) + PC2 + PC3 + Gender`  
-- Allows for **nonlinear effects** and **interaction by Gender**.  
-- LOOCV Accuracy: **77.3%**  
-- 5-Fold Cross-Validation: **83% ± 0.17**  
-- Baseline Accuracy: **59%**
-
-| Metric | GLM (PC1 + Gender) | GAM (PC1–PC3 + Gender) |
-|---------|--------------------|-------------------------|
-| LOOCV Accuracy | 0.636 | **0.773** ✅ |
-| 5-Fold Accuracy | — | **0.83 ± 0.17** |
-| Baseline | 0.591 | 0.591 |
-| Interpretability | High | Moderate (nonlinear) |
-| Overfitting Risk | Medium | Lower (cross-validated) |
-
----
-
-## 📈 Key Insights  
-- **PC1** shows a **nonlinear relationship** with completion likelihood.  
-- **Gender** introduces a small but noticeable shift — females generally scored higher.  
-- The **GAM model captures patterns** that the simpler GLM missed.  
-- **Predicted probability (example):**  
-  - New female participant → **0.985 (likely completer)**  
-
----
-
-## ⚖️ Interpretation: Prediction Strength vs. Statistical Significance  
-Even though **PC1, PC2, PC3, and Gender** were *not statistically significant*,  
-the model still **generalized well** and achieved strong predictive accuracy.  
-
-This underscores a key trade-off:  
-- **Predictive strength** ≠ **Statistical significance**.  
-- The model forecasts outcomes accurately but provides less interpretive clarity about “why.”  
-
----
-
-##  Next Steps  
-1. **Validation:**  
-   - Re-run both **GLM (PC1 + Gender)** and **GAM (PC1–PC3 + Gender)** using **LOOCV** and **10-fold CV** for stronger reliability.  
-2. **Expansion:**  
-   - Collect more observations to stabilize variance and improve inference power.  
-3. **Simplification:**  
-   - Reassess whether PC2 and PC3 add meaningful predictive value — possibly refit `s(PC1) + Gender`.  
-4. **Deployment:**  
-   - Package the final GAM pipeline (scaling, PCA rotation, GAM model) for real-time predictions.  
-5. **Monitoring:**  
-   - Continuously validate model accuracy as new data comes in to detect drift over time.  
-
----
-
-## Final Conclusion  
-The **GAM (PC1–PC3 + Gender)** model achieved **77–83% accuracy**, outperforming both the baseline (59%) and the simpler GLM.  
-It offers **strong predictive performance** and **generalizes well** despite small sample size.  
-
-However, because its predictors are not statistically significant, it should be viewed as a **high-performing predictive model** rather than an explanatory one.  
-It provides a robust foundation for developing future tools that help identify participants most likely to succeed in the program.  
-
----
-
-##  Technologies Used  
-- **R 4.5.1** (macOS Sequoia 15.6.1)  
-- Libraries:  
-  - `mgcv` — Generalized Additive Models  
-  - `caret` — Cross-validation and model assessment  
-  - `ggplot2` — Visualization  
-  - `glmnet` / `brglm2` — Robust logistic regression alternatives  
-  - `knitr`, `rmarkdown` — Report generation  
-
-
+- **R**
+- **mgcv** — Generalized Additive Models  
+- **glmnet** — Regularized Logistic Regression  
+- **pROC** — ROC and AUC evaluation  
+- **themis** — SMOTE for class balancing  
+- **dplyr** — Data wrangling  
+- **ggplot2** — Visualization  
+- **knitr / rmarkdown** — Report generation  
