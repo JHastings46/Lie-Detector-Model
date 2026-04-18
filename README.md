@@ -146,9 +146,9 @@ This was the strongest model tested. Adding **PC2** and using **regularization**
 
 | Model | AUC | Accuracy | Sensitivity | Specificity |
 |------|-----:|---------:|------------:|------------:|
-| Baseline GAM | 0.5897 | — | 0.7692 | 0.4444 |
-| PCA + GAM | 0.6068 | — | 0.7692 | 0.5556 |
-| PCA + GLM | 0.6154 | — | 0.6923 | 0.5556 |
+| Baseline GAM | 0.5897 | 0.6364 | 0.7692 | 0.4444 |
+| PCA + GAM | 0.6068 | 0.6818 | 0.7692 | 0.5556 |
+| PCA + GLM | 0.6154 | 0.6364 | 0.6923 | 0.5556 |
 | PCA + SMOTE + GAM | 0.6154 | 0.6818 | 0.6923 | 0.6667 |
 | **PCA + Regularized GLM** | **0.7692** | **0.8182** | **0.9231** | **0.6667** |
 
